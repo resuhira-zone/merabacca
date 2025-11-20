@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            padding: 3rem 0;
+            background: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.7));
+            border-radius: 0 0 30px 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 3rem;
+        }
+        
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4.5rem;
+            color: #d63384;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            color: #6c757d;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #d63384;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-links a:hover, .nav-links a.active {
+            background-color: #d63384;
+            color: white;
+        }
+        
+        .memory-section {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .memory-section::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 192, 203, 0.2);
+            border-radius: 50%;
+            z-index: 0;
+        }
+        
+        .section-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+            color: #d63384;
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .memory-timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .timeline-item {
+            display: flex;
+            margin-bottom: 4rem;
+            position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .timeline-item:nth-child(odd) {
+            flex-direction: row;
+        }
+        
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+        
+        .timeline-content {
+            flex: 1;
+            padding: 2rem;
+            background: rgba(255, 240, 245, 0.7);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .timeline-date {
+            font-weight: bold;
+            color: #d63384;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .timeline-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        .timeline-image {
+            flex: 1;
+            height: 300px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 4rem;
+            margin: 0 2rem;
+        }
+        
+        .timeline-item:nth-child(odd) .timeline-image {
+            background: linear-gradient(135deg, #ffafbd 0%, #ffc3a0 100%);
+        }
+        
+        .timeline-item:nth-child(even) .timeline-image {
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+        }
+        
+        .memory-stats {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            min-width: 200px;
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-item:hover {
+            transform: translateY(-10px);
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #d63384;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 1.2rem;
+            color: #6c757d;
+        }
+        
+        .memory-quotes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .quote-card {
+            flex: 1;
+            min-width: 300px;
+            padding: 2rem;
+            background: rgba(255, 240, 245, 0.7);
+            border-radius: 15px;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .quote-card::before {
+            content: '"';
+            font-size: 5rem;
+            color: #ff6b6b;
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            opacity: 0.3;
+        }
+        
+        .quote-text {
+            font-style: italic;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .quote-author {
+            text-align: right;
+            color: #d63384;
+            font-weight: 500;
+        }
+        
+        .memory-scrapbook {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .scrapbook-item {
+            height: 250px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        
+        .scrapbook-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .scrapbook-item:nth-child(odd) {
+            background: linear-gradient(135deg, #ffafbd 0%, #ffc3a0 100%);
+        }
+        
+        .scrapbook-item:nth-child(even) {
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+        }
+        
+        .scrapbook-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .scrapbook-item:hover .scrapbook-overlay {
+            opacity: 1;
+        }
+        
+        .scrapbook-overlay-content {
+            text-align: center;
+            color: white;
+        }
+        
+        .memory-game {
+            background: rgba(255, 240, 245, 0.7);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-top: 2rem;
+            text-align: center;
+        }
+        
+        .game-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            max-width: 600px;
+            margin: 2rem auto;
+        }
+        
+        .memory-card {
+            height: 120px;
+            background: linear-gradient(135deg, #ffafbd 0%, #ffc3a0 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            transform-style: preserve-3d;
+        }
+        
+        .memory-card.flipped {
+            transform: rotateY(180deg);
+            background: white;
+            color: #d63384;
+        }
+        
+        .memory-card.matched {
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+            cursor: default;
+        }
+        
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 1rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: transparent;
+            opacity: 0.7;
+        }
+        
+        .heart:before, .heart:after {
+            position: absolute;
+            content: "";
+            left: 10px;
+            top: 0;
+            width: 10px;
+            height: 16px;
+            background: #ff6b6b;
+            border-radius: 10px 10px 0 0;
+            transform: rotate(-45deg);
+            transform-origin: 0 100%;
+        }
+        
+        .heart:after {
+            left: 0;
+            transform: rotate(45deg);
+            transform-origin: 100% 100%;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            color: #6c757d;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #d63384;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            transform: translateY(-5px);
+            background: #ff6b6b;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 3.5rem;
+            }
+            
+            .section-title {
+                font-size: 2.5rem;
+            }
+            
+            .timeline-item {
+                flex-direction: column !important;
+            }
+            
+            .timeline-image {
+                margin: 1rem 0;
+                height: 200px;
+            }
+            
+            .game-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .memory-card {
+                height: 100px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2.8rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .memory-section {
+                padding: 1.5rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .game-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-hearts" id="heartsContainer"></div>
+    
+    <header>
+        <div class="container">
+            <h1>Memory Lane</h1>
+            <p class="subtitle">A journey through our most cherished moments together</p>
+            
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="gallery.html">Gallery</a>
+                <a href="memory.html" class="active">Memories</a>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <section class="memory-section">
+            <h2 class="section-title">Our Journey Together</h2>
+            
+            <div class="memory-timeline" id="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">February 2023</div>
+                        <h3 class="timeline-title">The First Meeting</h3>
+                        <p>On Instagram</p>
+                    </div>
+                    <div class="timeline-image">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">4 may 2023</div>
+                        <h3 class="timeline-title"🫂</h3>
+                        <p>Merrage promise </p>
+                    </div>
+                    <div class="timeline-image">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">4 August 2025</div>
+                        <h3 class="timeline-title">🥺</h3>
+                        <p>first meet up face to face</p>
+                    </div>
+                    <div class="timeline-image">
+                        <i class="fas fa-umbrella-beach"></i>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">13 November 2025</div>
+                        <h3 class="timeline-title">🫂🥰🥺</h3>
+                        <p>second meet up</p>
+                    </div>
+                    <div class="timeline-image">
+                        <i class="fas fa-home"></i>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">continue</div>
+                        <h3 class="timeline-title">
+                    </div>
+                    <div class="timeline-image">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="memory-section">
+            <h2 class="section-title">By The Numbers</h2>
+            
+            <div class="memory-stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="days-together">0</div>
+                    <div class="stat-label">Days Together</div>
+                </div>
+                
+                <div class="stat-item">
+                    <div class="stat-number" id="memories-count">∞</div>
+                    <div class="stat-label">Special Memories</div>
+                </div>
+                
+                <div class="stat-item">
+                    <div class="stat-number" id="trips-count">2</div>
+                    <div class="stat-label">Trips Together</div>
+                </div>
+                
+                <div class="stat-item">
+                    <div class="stat-number" id="laughs-count">∞</div>
+                    <div class="stat-label">Shared Laughs</div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="memory-section">
+            <h2 class="section-title">Sweet Memories</h2>
+            
+            <div class="memory-scrapbook">
+                <div class="scrapbook-item">
+                    <i class="fas fa-music"></i>
+                    <div class="scrapbook-overlay">
+                        <div class="scrapbook-overlay-content">
+                            <h3>Our Song</h3>
+                            <p>"Perfect" by Ed Sheeran</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="scrapbook-item">
+                    <i class="fas fa-utensils"></i>
+                    <div class="scrapbook-overlay">
+                        <div class="scrapbook-overlay-content">
+                            <h3>Our Restaurant</h3>
+                            <p>That little Italian place</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="scrapbook-item">
+                    <i class="fas fa-film"></i>
+                    <div class="scrapbook-overlay">
+                        <div class="scrapbook-overlay-content">
+                            <h3>Our Movie</h3>
+                            <p>The Notebook</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="scrapbook-item">
+                    <i class="fas fa-mountain"></i>
+                    <div class="scrapbook-overlay">
+                        <div class="scrapbook-overlay-content">
+                            <h3>Our Spot</h3>
+                            <p>Sunset Point</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="scrapbook-item">
+                    <i class="fas fa-ice-cream"></i>
+                    <div class="scrapbook-overlay">
+                        <div class="scrapbook-overlay-content">
+                            <h3>Our Treat</h3>
+                            <p>Double chocolate chip</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="scrapbook-item">
+                    <i class="fas fa-book"></i>
+                    <div class="scrapbook-overlay">
+                        <div class="scrapbook-overlay-content">
+                            <h3>Our Book</h3>
+                            <p>The Little Prince</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="memory-section">
+            <h2 class="section-title"></h2></h2>
+            
+            <div class="memory-quotes">
+                <div class="quote-card">
+                    <p class="quote-text">"
+                    <p class="quote-author">4 AUGUST 2025- The First Meeting</p>
+                </div>
+                
+                <div class="quote-card">
+                    <p class="quote-text">""</p>
+                    <p class="quote-author">13 November 2025 -2nd metting</p>
+                </div>
+                
+                <div class="quote-card">
+                    <p class="quote-text">""</p>
+                    <p class="quote-author"></p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="memory-section">
+            <h2 class="section-title"></h2>
+            <p></p>
+            
+            <div class="memory-game">
+                <div class="game-info">
+                    <div>Moves: <span id="moves">0</span></div>
+                    <div>Matches: <span id="matches">0</span>/6</div>
+                    <button id="reset-game">Reset Game</button>
+                </div>
+                
+                <div class="game-container" id="game-container">
+                    <!-- Memory cards will be generated by JavaScript -->
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <div class="social-links">
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+            </div>
+            <p>Made with <i class="fas fa-heart" style="color: #d63384;"></i> | for </p>
+            <p>&copy; 2023 Our Love Story.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Memory data
+        const memoryData = [
+            { id: 1, date: "October 2018", title: "The First Meeting", content: "It was a rainy Tuesday when our paths first crossed..." },
+            { id: 2, date: "February 2019", title: "Our First Valentine's Day", content: "You surprised me with a homemade dinner..." },
+            { id: 3, date: "July 2019", title: "Our First Vacation", content: "We spent a week at that little beach house..." },
+            { id: 4, date: "December 2020", title: "Moving In Together", content: "Finding our perfect little apartment felt like building our own world..." },
+            { id: 5, date: "June 2022", title: "The Proposal", content: "I took you back to that café where we first met..." }
+        ];
+
+        // Memory game data
+        const memoryGameIcons = [
+            'fas fa-heart', 'fas fa-heart',
+            'fas fa-music', 'fas fa-music',
+            'fas fa-umbrella-beach', 'fas fa-umbrella-beach',
+            'fas fa-home', 'fas fa-home',
+            'fas fa-gem', 'fas fa-gem',
+            'fas fa-star', 'fas fa-star'
+        ];
+
+        // DOM elements
+        const timeline = document.getElementById('timeline');
+        const daysTogether = document.getElementById('days-together');
+        const gameContainer = document.getElementById('game-container');
+        const movesElement = document.getElementById('moves');
+        const matchesElement = document.getElementById('matches');
+        const resetButton = document.getElementById('reset-game');
+
+        // Initialize the page
+        function initPage() {
+            calculateDaysTogether();
+            setupTimelineAnimation();
+            initMemoryGame();
+            createHearts();
+        }
+
+        // Calculate days together
+        function calculateDaysTogether() {
+            // Set your relationship start date (year, month-1, day)
+            const startDate = new Date(2023, 2, 25); // 25 February 2023
+            const today = new Date();
+            const timeDiff = today.getTime() - startDate.getTime();
+            const daysDiff = Math.floor(timeDiff / (1000 * 3600 * 24));
+            
+            daysTogether.textContent = daysDiff;
+        }
+
+        // Setup timeline animation on scroll
+        function setupTimelineAnimation() {
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            timelineItems.forEach(item => {
+                observer.observe(item);
+            });
+        }
+
+        // Initialize memory game
+        function initMemoryGame() {
+            let moves = 0;
+            let matches = 0;
+            let flippedCards = [];
+            let canFlip = true;
+            
+            // Shuffle the icons
+            const shuffledIcons = [...memoryGameIcons].sort(() => Math.random() - 0.5);
+            
+            // Clear the game container
+            gameContainer.innerHTML = '';
+            
+            // Create memory cards
+            shuffledIcons.forEach((icon, index) => {
+                const card = document.createElement('div');
+                card.className = 'memory-card';
+                card.dataset.icon = icon;
+                card.dataset.index = index;
+                
+                card.innerHTML = `<i class="${icon}"></i>`;
+                
+                card.addEventListener('click', () => flipCard(card));
+                
+                gameContainer.appendChild(card);
+            });
+            
+            // Flip card function
+            function flipCard(card) {
+                if (!canFlip || card.classList.contains('flipped') || card.classList.contains('matched')) {
+                    return;
+                }
+                
+                card.classList.add('flipped');
+                flippedCards.push(card);
+                
+                if (flippedCards.length === 2) {
+                    canFlip = false;
+                    moves++;
+                    movesElement.textContent = moves;
+                    
+                    // Check for match
+                    if (flippedCards[0].dataset.icon === flippedCards[1].dataset.icon) {
+                        // Match found
+                        flippedCards[0].classList.add('matched');
+                        flippedCards[1].classList.add('matched');
+                        matches++;
+                        matchesElement.textContent = matches;
+                        
+                        flippedCards = [];
+                        canFlip = true;
+                        
+                        // Check if game is complete
+                        if (matches === 6) {
+                            setTimeout(() => {
+                                alert(`Congratulations! You completed the game in ${moves} moves!`);
+                            }, 500);
+                        }
+                    } else {
+                        // No match
+                        setTimeout(() => {
+                            flippedCards[0].classList.remove('flipped');
+                            flippedCards[1].classList.remove('flipped');
+                            flippedCards = [];
+                            canFlip = true;
+                        }, 1000);
+                    }
+                }
+            }
+            
+            // Reset game function
+            resetButton.addEventListener('click', () => {
+                moves = 0;
+                matches = 0;
+                movesElement.textContent = moves;
+                matchesElement.textContent = matches;
+                initMemoryGame();
+            });
+        }
+
+        // Create floating hearts
+        function createHearts() {
+            const heartsContainer = document.getElementById('heartsContainer');
+            const heartCount = 20;
+            
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                
+                // Random position
+                const left = Math.random() * 100;
+                const top = Math.random() * 100;
+                
+                // Random size
+                const size = Math.random() * 20 + 10;
+                
+                // Random animation delay and duration
+                const delay = Math.random() * 5;
+                const duration = Math.random() * 10 + 10;
+                
+                heart.style.left = `${left}vw`;
+                heart.style.top = `${top}vh`;
+                heart.style.width = `${size}px`;
+                heart.style.height = `${size}px`;
+                heart.style.animation = `float ${duration}s ease-in-out ${delay}s infinite`;
+                
+                heartsContainer.appendChild(heart);
+            }
+        }
+
+        // Add CSS for floating animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes float {
+                0% {
+                    transform: translateY(0) rotate(0deg);
+                    opacity: 0.7;
+                }
+                50% {
+                    transform: translateY(-20px) rotate(10deg);
+                    opacity: 1;
+                }
+                100% {
+                    transform: translateY(0) rotate(0deg);
+                    opacity: 0.7;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize the page
+        window.onload = function() {
+            initPage();
+        };
+    </script>
+</body>
+</html>
